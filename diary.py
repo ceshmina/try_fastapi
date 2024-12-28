@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+from datetime import datetime
 import json
 import os
+import random
 from urllib.request import Request, urlopen
 
 
@@ -8,6 +10,12 @@ from urllib.request import Request, urlopen
 class DiaryMeta:
     name: str
     download_url: str
+
+
+@dataclass
+class Diary:
+    date: str
+    content: str
 
 
 OWNER = 'ceshmina'
@@ -18,7 +26,7 @@ HEADERS = {
 }
 
 
-def get_diaries_from_github(path: str):
+def get_diaries_from_github(path: str) -> list[DiaryMeta]:
     url = f'https://api.github.com/repos/{OWNER}/{REPO}/contents/{path}'
     print(f'Fetching from {url} ...')
     result = []
@@ -38,7 +46,27 @@ def get_diaries_from_github(path: str):
     return result
 
 
+def get_content_from_github(download_url: str) -> str:
+    print(f'Fetching from {download_url} ...')
+    with urlopen(Request(download_url, headers=HEADERS)) as response:
+        return response.read().decode('utf-8')
+
+
+def get_random_diaries(n: int) -> list[Diary]:
+    diary_metas = random.sample(get_diaries_from_github('_articles'), n)
+    diaries = []
+
+    for diary_meta in diary_metas:
+        content = get_content_from_github(diary_meta.download_url)
+        diaries.append(Diary(
+            date=datetime.strptime(diary_meta.name[:8], '%Y%m%d').date(),
+            content=content
+        ))
+
+    return diaries
+
+
 if __name__ == '__main__':
-    diaries = get_diaries_from_github('_articles')
-    for diary in diaries[:10]:
-        print(diary)
+    diaries = get_random_diaries(3)
+    for diary in diaries:
+        print(f'{diary.date}:\n{diary.content}\n\n\n')
