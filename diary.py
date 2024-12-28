@@ -5,17 +5,13 @@ import os
 import random
 from urllib.request import Request, urlopen
 
+from python.model.diary import Diary
+
 
 @dataclass
 class DiaryMeta:
     name: str
     download_url: str
-
-
-@dataclass
-class Diary:
-    date: str
-    content: str
 
 
 OWNER = 'ceshmina'
@@ -69,4 +65,5 @@ def get_random_diaries(n: int) -> list[Diary]:
 if __name__ == '__main__':
     diaries = get_random_diaries(3)
     for diary in diaries:
-        print(f'{diary.date}:\n{diary.content}\n\n\n')
+        date_str = diary.date.strftime('%Y年%-m月%-d日')
+        print(f'{date_str}:\n{diary.content}\n\n\n')
