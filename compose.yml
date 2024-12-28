@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - GITHUB_PAT=${GITHUB_PAT}
     ports:
       - 8081:8000
     volumes:
