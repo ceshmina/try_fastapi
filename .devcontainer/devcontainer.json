@@ -1,6 +1,6 @@
 {
   "dockerComposeFile": ["../compose.yml", "compose.yml"],
-  "runServices": ["python"],
-  "service": "python",
+  "runServices": ["python-dev"],
+  "service": "python-dev",
   "workspaceFolder": "/app"
 }

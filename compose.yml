@@ -1,8 +1,8 @@
 services:
-  python:
+  python-dev:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/dev/python.dev.dockerfile
     environment:
       - GITHUB_PAT=${GITHUB_PAT}
     ports:
@@ -13,3 +13,13 @@ services:
       - /app/__pycache__
     working_dir: /app
     command: uv run uvicorn main:app --host 0.0.0.0 --reload
+
+  python:
+    build:
+      context: .
+      dockerfile: docker/prod/python.dockerfile
+    environment:
+      - GITHUB_PAT=${GITHUB_PAT}
+    ports:
+      - 8081:8000
+    command: uv run uvicorn main:app --host 0.0.0.0
