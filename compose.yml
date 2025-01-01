@@ -18,8 +18,5 @@ services:
     build:
       context: .
       dockerfile: docker/prod/python.dockerfile
-    environment:
-      - GITHUB_PAT=${GITHUB_PAT}
     ports:
-      - 8081:8000
-    command: uv run uvicorn main:app --host 0.0.0.0
+      - 8081:80
