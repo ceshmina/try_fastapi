@@ -25,14 +25,19 @@ uv run uvicorn main:app --host 0.0.0.0 --reload
 事前にECRにログインしてください。
 
 ```
-aws --region ap-northeast-1 ecr get-login-password --profile {profile} | docker login --username AWS --password-stdin {project_id}.dkr.ecr.ap-northeast-1.amazonaws.com/fastapi-sample
+aws --region ap-northeast-1 ecr get-login-password --profile ${PROFILE} | docker login --username AWS --password-stdin ${PROJECT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/fastapi-sample
 ```
 
 デプロイ用のコンテナイメージを以下コマンドでビルドし、ECRにプッシュします。
 
 ```
+docker compose build nginx
+docker tag try_fastapi-nginx:latest ${PROJECT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/fastapi-sample/nginx:latest
+docker push ${PROJECT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/fastapi-sample/nginx:latest
+
 docker compose build python
-docker tag try_fastapi-python:latest {project_id}.dkr.ecr.ap-northeast-1.amazonaws.com/fastapi-sample:latest
+docker tag try_fastapi-python:latest ${PROJECT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/fastapi-sample/python:latest
+docker push ${PROJECT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/fastapi-sample/python:latest
 ```
 
 TODO: ECSへの反映方法を記載する

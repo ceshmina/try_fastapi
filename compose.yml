@@ -14,9 +14,19 @@ services:
     working_dir: /app
     command: uv run uvicorn main:app --host 0.0.0.0 --reload
 
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/prod/nginx.dockerfile
+    ports:
+      - 8081:80
+    depends_on:
+      - python
+
   python:
     build:
       context: .
       dockerfile: docker/prod/python.dockerfile
+    container_name: try_fastapi-python
     ports:
-      - 8081:80
+      - 8000:8000
